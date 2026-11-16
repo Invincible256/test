@@ -8,3 +8,12 @@ ros2 component load /hik_camera_container hik_camera_driver hik_camera_driver::D
   
   # 关闭演示窗口（相机继续工作）
 ros2 component unload /hik_camera_container 4
+
+#查找未能完全关闭的摄像头进程并强制关闭
+ps aux | grep -E "component_container|hik_|ros2 launch" | grep -v grep
+
+kill -INT <PID>      # 相当于 Ctrl+C，先试这个，等 5 秒
+kill <PID>           # 还在的话，用这个，再等 5 秒
+kill -9 <PID>        # 还在的话，强制结束
+
+ros2 daemon stop
