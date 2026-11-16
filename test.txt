@@ -1,0 +1,10 @@
+# 打开演示窗口（加载进正在运行的容器）
+ros2 component load /hik_camera_container hik_camera_driver hik_camera_driver::DemoViewer \
+  --node-name demo_viewer --node-namespace /stereo \
+  -e use_intra_process_comms:=true \
+  -p display_fps:=30.0 -p resolution_level:=3
+  
+  执行后会输出一行类似 Loaded component 4 into '/hik_camera_container' ...，记下这个编号（这里是 4）。
+  
+  # 关闭演示窗口（相机继续工作）
+ros2 component unload /hik_camera_container 4
