@@ -1,19 +1,9 @@
-# 打开演示窗口（加载进正在运行的容器）
-ros2 component load /hik_camera_container hik_camera_driver hik_camera_driver::DemoViewer \
-  --node-name demo_viewer --node-namespace /stereo \
-  -e use_intra_process_comms:=true \
-  -p display_fps:=30.0 -p resolution_level:=3
-  
-  执行后会输出一行类似 Loaded component 4 into '/hik_camera_container' ...，记下这个编号（这里是 4）。
-  
-  # 关闭演示窗口（相机继续工作）
-ros2 component unload /hik_camera_container 4
+cd ~/camera/hik_camera_ws_v2
+unzip -o ~/下载/demo_viewer_fix.zip         # 换成压缩包的实际路径
+cd hik_camera_ws
+source /opt/ros/jazzy/setup.bash
+colcon build --symlink-install --packages-select hik_camera_driver
+source ~/camera/env.sh
+ros2 launch hik_camera_driver stereo.launch.py config:=lab_real.yaml
 
-#查找未能完全关闭的摄像头进程并强制关闭
-ps aux | grep -E "component_container|hik_|ros2 launch" | grep -v grep
 
-kill -INT <PID>      # 相当于 Ctrl+C，先试这个，等 5 秒
-kill <PID>           # 还在的话，用这个，再等 5 秒
-kill -9 <PID>        # 还在的话，强制结束
-
-ros2 daemon stop
